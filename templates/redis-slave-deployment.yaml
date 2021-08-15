@@ -1,0 +1,24 @@
+# SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.slave.name}}
+  labels:
+{{- include "labels.redis-slave" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.slave.numberReplicas}}
+  selector:
+    matchLabels:
+      app: {{ .Values.slave.labels.app}}
+  template:
+    metadata:
+      labels:
+{{- include "labels.redis-slave" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.slave.containerName}}
+        image: {{ .Values.slave.containers.image}}
+        resources:
+{{- include "resource.pod-request" . | nindent 10 }}
+        ports:
+        - containerPort: {{ .Values.slave.containers.port}}

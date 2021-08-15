@@ -1,0 +1,14 @@
+# SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.slave.serviceName}}
+  labels:
+{{- include "labels.redis-slave" . | nindent 4 }}
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: {{ .Values.slave.containers.port}}
+    #targetPort: {{ .Values.slave.containers.port}}
+  selector:
+{{- include "labels.redis-slave" . | nindent 4 }}

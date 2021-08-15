@@ -1,0 +1,39 @@
+# Front end pod
+frontend:
+  name: frontend
+  containers:
+    name: frontend-guestbook
+    image: gcr.io/google_samples/gb-frontend:v5
+  numberReplicas: 1
+
+# Master pod
+master:
+  serviceName: redis-leader
+  name: redis-leader
+  labels:
+    app: redis
+    role: leader
+    tier: backend
+  numberReplicas: 1
+  labelsSelector:
+    app: redis  
+  containerName: leader
+  containers:
+    image: docker.io/redis:6.0.5
+    port: 6379  
+# Slave pods
+slave:
+  serviceName: redis-follower
+  name: redis-follower
+  labels:
+    app: redis
+    role: follower
+    tier: backend
+  numberReplicas: 2
+  labelsSelector:
+    app: redis  
+  containerName: follower
+  containers:
+    image: gcr.io/google_samples/gb-redis-follower:v2
+    port: 6379  
+    

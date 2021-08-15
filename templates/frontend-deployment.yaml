@@ -1,0 +1,25 @@
+# SOURCE: https://cloud.google.com/kubernetes-engine/docs/tutorials/guestbook
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.frontend.name}}
+spec:
+  replicas: {{.Values.frontend.numberReplicas}}
+  selector:
+    matchLabels:
+{{- include "labels.frontend" . | nindent 8 }}
+  template:
+    metadata:
+      labels:
+{{- include "labels.frontend" . | nindent 8 }}
+    spec:
+      containers:
+      - name: php-redis
+        image: {{.Values.frontend.containers.image}}
+        env:
+        - name: GET_HOSTS_FROM
+          value: "dns"
+        resources:
+{{- include "resource.pod-request" . | nindent 10 }}
+        ports:
+        - containerPort: 80
