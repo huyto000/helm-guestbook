@@ -9,9 +9,11 @@ spec:
   # if your cluster supports it, uncomment the following to automatically create
   # an external load-balanced IP for the frontend service.
   # type: LoadBalancer
-  #type: LoadBalancer
+  type: NodePort
   ports:
     # the port that this service should serve on
-  - port: 80
+  - targetPort: 80 
+    port: 80
+    nodePort: 30080
   selector:
 {{- include "labels.frontend" . | nindent 4 }}
